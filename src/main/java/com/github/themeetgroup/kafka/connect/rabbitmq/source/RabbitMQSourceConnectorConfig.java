@@ -34,19 +34,30 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
       "See `Channel.basicQos(int, boolean) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/Channel.html#basicQos-int-boolean->`_";
 
   public static final String PREFETCH_GLOBAL_CONF = "rabbitmq.prefetch.global";
-  public static final String PREFETCH_GLOBAL_DOC = "True if the settings should be applied to the entire channel rather " +
-      "than each consumer. " +
+  public static final String PREFETCH_GLOBAL_DOC = "True if the settings should be applied to the entire channel rather than each consumer. " +
       "See `Channel.basicQos(int, boolean) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/Channel.html#basicQos-int-boolean->`_";
 
   public static final String MESSAGE_CONVERTER_CLASSNAME_CONF = "message.converter";
   public static final String MESSAGE_CONVERTER_CLASSNAME_DOC = "Converter to compose the Kafka message. Optional, defaults to " +
       "com.github.themeetgroup.kafka.connect.rabbitmq.source.data.MessageConverter";
 
+  public static final String EXCHANGE_CONF = "rabbitmq.exchange";
+  public static final String EXCHANGE_CONF_DOC = "rabbitmq.exchange";
+
+  public static final String ROUTING_KEY_CONF = "rabbitmq.routing.key";
+  public static final String ROUTING_KEY_CONF_DOC = "rabbitmq.routing.key";
+
+  public static final String QUEUE_TTL_CONF = "rabbitmq.queue.ttl";
+  public static final String QUEUE_TTL_DOC = "rabbitmq.queue.ttl";
+
   public final String kafkaTopic;
   public final List<String> queues;
   public final int prefetchCount;
   public final boolean prefetchGlobal;
   public final String messageConverter;
+  public final String exchange;
+  public final String routingKey;
+  public final Integer ttl;
 
   public RabbitMQSourceConnectorConfig(Map<String, String> settings) {
     super(config(), settings);
@@ -56,6 +67,9 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
     this.prefetchCount = this.getInt(PREFETCH_COUNT_CONF);
     this.prefetchGlobal = this.getBoolean(PREFETCH_GLOBAL_CONF);
     this.messageConverter = this.getString(MESSAGE_CONVERTER_CLASSNAME_CONF);
+    this.exchange = this.getString(EXCHANGE_CONF);
+    this.routingKey = this.getString(ROUTING_KEY_CONF);
+    this.ttl =  this.getInt(QUEUE_TTL_CONF);
   }
 
   public static ConfigDef config() {
@@ -64,6 +78,9 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
         .define(PREFETCH_COUNT_CONF, ConfigDef.Type.INT, 0, ConfigDef.Importance.MEDIUM, PREFETCH_COUNT_DOC)
         .define(PREFETCH_GLOBAL_CONF, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.MEDIUM, PREFETCH_GLOBAL_DOC)
         .define(QUEUE_CONF, ConfigDef.Type.LIST, ConfigDef.Importance.HIGH, QUEUE_DOC)
-        .define(MESSAGE_CONVERTER_CLASSNAME_CONF, ConfigDef.Type.STRING, ConfigDef.Importance.MEDIUM, MESSAGE_CONVERTER_CLASSNAME_DOC);
+        .define(MESSAGE_CONVERTER_CLASSNAME_CONF, ConfigDef.Type.STRING, ConfigDef.Importance.MEDIUM, MESSAGE_CONVERTER_CLASSNAME_DOC)
+        .define(EXCHANGE_CONF, ConfigDef.Type.STRING, ConfigDef.Importance.HIGH, EXCHANGE_CONF_DOC)
+        .define(ROUTING_KEY_CONF, ConfigDef.Type.STRING, ConfigDef.Importance.HIGH, ROUTING_KEY_CONF_DOC)
+        .define(QUEUE_TTL_CONF, ConfigDef.Type.INT, 0, ConfigDef.Importance.HIGH, QUEUE_TTL_DOC);
   }
 }

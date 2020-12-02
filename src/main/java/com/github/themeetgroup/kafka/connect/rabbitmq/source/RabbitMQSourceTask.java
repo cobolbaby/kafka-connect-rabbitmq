@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -39,7 +40,7 @@ public class RabbitMQSourceTask extends SourceTask {
   private SourceRecordConcurrentLinkedDeque records;
   private Channel channel;
   private Connection connection;
-
+  
   @Override
   public String version() {
     return VersionUtil.version(this.getClass());
@@ -67,9 +68,19 @@ public class RabbitMQSourceTask extends SourceTask {
     try {
       log.info("Creating Channel");
       this.channel = this.connection.createChannel();
+
+      log.info("Declaring exchange");
+      this.channel.exchangeDeclare(config.exchange, "topic");
+
       log.info("Declaring queues");
+      Map<String, Object> arguments = new HashMap<String, Object>();
+      Integer ttl = config.ttl;
+      if (ttl != 0) {
+        arguments.put("x-message-ttl", ttl);
+      }
       for (String queue : config.queues) {
-        this.channel.queueDeclare(queue, true, false, false, null);
+        this.channel.queueDeclare(queue, true, false, false, arguments);
+        this.channel.queueBind(queue, config.exchange, config.routingKey);
       }
     } catch (IOException e) {
       throw new ConnectException(e);
