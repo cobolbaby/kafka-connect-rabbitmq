@@ -57,7 +57,7 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
   public final String messageConverter;
   public final String exchange;
   public final String routingKey;
-  public final Integer ttl;
+  public final int ttl;
 
   public RabbitMQSourceConnectorConfig(Map<String, String> settings) {
     super(config(), settings);
