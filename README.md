@@ -437,9 +437,11 @@ Update an existing instance.
 curl -s -X PUT -H 'Content-Type: application/json' --data @connector.json http://localhost:8083/connectors/TestSinkConnector1/config
 ```
 
-## SSL Configuration
+### SSL/TLS
 
-### `rabbitmq.ssl.keystore.location`
+#### Configuration
+
+##### `rabbitmq.ssl.keystore.location`
 *Importance:* Low
 
 *Type:* String
@@ -448,7 +450,7 @@ curl -s -X PUT -H 'Content-Type: application/json' --data @connector.json http:/
 
 Path to the keystore.
 
-### `rabbitmq.ssl.keystore.password`
+##### `rabbitmq.ssl.keystore.password`
 *Importance:* Low
 
 *Type:* String
@@ -457,7 +459,7 @@ Path to the keystore.
 
 Keystore password.
 
-### `rabbitmq.ssl.keystore.passphrase`
+##### `rabbitmq.ssl.keystore.passphrase`
 *Importance:* Low
 
 *Type:* String
@@ -466,7 +468,7 @@ Keystore password.
 
 Keystore passphrase.
 
-### `rabbitmq.ssl.keystore.type`
+##### `rabbitmq.ssl.keystore.type`
 *Importance:* Low
 
 *Type:* String
@@ -475,7 +477,7 @@ Keystore passphrase.
 
 Keystore type.
 
-### `rabbitmq.ssl.truststore.location`
+##### `rabbitmq.ssl.truststore.location`
 *Importance:* Low
 
 *Type:* String
@@ -484,7 +486,7 @@ Keystore type.
 
 Path to the truststore.
 
-### `rabbitmq.ssl.truststore.password`
+##### `rabbitmq.ssl.truststore.password`
 *Importance:* Low
 
 *Type:* String
@@ -493,7 +495,7 @@ Path to the truststore.
 
 Truststore password.
 
-### `rabbitmq.ssl.truststore.type`
+##### `rabbitmq.ssl.truststore.type`
 *Importance:* Low
 
 *Type:* String
@@ -502,7 +504,7 @@ Truststore password.
 
 Truststore type.
 
-### `rabbitmq.ssl.protocol`
+##### `rabbitmq.ssl.protocol`
 *Importance:* Low
 
 *Type:* String
