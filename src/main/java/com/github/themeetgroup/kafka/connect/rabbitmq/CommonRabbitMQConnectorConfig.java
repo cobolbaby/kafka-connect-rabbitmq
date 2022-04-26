@@ -40,6 +40,15 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
   public static final String HOST_CONFIG = "rabbitmq.host";
   public static final String PORT_CONFIG = "rabbitmq.port";
   public static final String USE_SSL = "rabbitmq.ssl";
+  public static final String KEYSTORE_LOCATION = "rabbitmq.ssl.keystore.location";
+  public static final String KEYSTORE_PASSWORD = "rabbitmq.ssl.keystore.password";
+  public static final String KEYSTORE_PASSPHRASE = "rabbitmq.ssl.keystore.passphrase";
+  public static final String KEYSTORE_TYPE = "rabbitmq.ssl.keystore.type";
+  public static final String TRUSTSTORE_LOCATION = "rabbitmq.ssl.truststore.location";
+  public static final String TRUSTSTORE_PASSWORD = "rabbitmq.ssl.truststore.password";
+  public static final String TRUSTSTORE_TYPE = "rabbitmq.ssl.truststore.type";
+  public static final String SSL_PROTOCOL = "rabbitmq.ssl.protocol";
+
   static final String HOST_DOC = "The RabbitMQ host to connect to. See `ConnectionFactory.setHost(java.lang.String) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setHost-java.lang.String->`_";
   static final String USERNAME_DOC = "The username to authenticate to RabbitMQ with. See `ConnectionFactory.setUsername(java.lang.String) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setUsername-java.lang.String->`_";
   static final String PASSWORD_DOC = "The password to authenticate to RabbitMQ with. See `ConnectionFactory.setPassword(java.lang.String) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setPassword-java.lang.String->`_";
@@ -63,6 +72,15 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
   static final String NETWORK_RECOVERY_INTERVAL_DOC = "See `ConnectionFactory.setNetworkRecoveryInterval(long) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setNetworkRecoveryInterval-long->`_";
   static final String PORT_DOC = "The RabbitMQ port to connect to. See `ConnectionFactory.setPort(int) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setPort-int->`_";
   static final String USE_SSL_DOC = "Enable SSL/TLS";
+  static final String KEYSTORE_LOCATION_DOC = "Keystore location";
+  static final String KEYSTORE_PASSWORD_DOC = "Keystore password";
+  static final String KEYSTORE_PASSPHRASE_DOC = "Keystore passphrase";
+  static final String KEYSTORE_TYPE_DOC = "Keystore type (only JKS supported)";
+  static final String TRUSTSTORE_LOCATION_DOC = "Truststore location";
+  static final String TRUSTSTORE_PASSWORD_DOC = "Truststore password";
+  static final String TRUSTSTORE_TYPE_DOC = "Truststore type (only JKS supported)";
+  static final String SSL_PROTOCOL_DOC = "SSL/TLS protocol to use";
+
   public final String username;
   public final String password;
   public final String virtualHost;
@@ -78,6 +96,15 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
   public final String host;
   public final int port;
   public final boolean useSsl;
+  public final String keystoreLocation;
+  public final String keystorePassword;
+  public final String keystorePassphrase;
+  public final String keystoreType;
+  public final String truststoreLocation;
+  public final String truststorePassword;
+  public final String truststoreType;
+  public final String sslProtocol;
+
   public final ConnectionFactory connectionFactory;
 
   public CommonRabbitMQConnectorConfig(ConfigDef definition, Map<?, ?> originals) {
@@ -97,6 +124,15 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
     this.host = this.getString(HOST_CONFIG);
     this.port = this.getInt(PORT_CONFIG);
     this.useSsl = this.getBoolean(USE_SSL);
+    this.keystoreLocation = this.getString(KEYSTORE_LOCATION);
+    this.keystorePassword = this.getString(KEYSTORE_PASSWORD);
+    this.keystorePassphrase = this.getString(KEYSTORE_PASSPHRASE);
+    this.keystoreType = this.getString(KEYSTORE_TYPE);
+    this.truststoreLocation = this.getString(TRUSTSTORE_LOCATION);
+    this.truststorePassword = this.getString(TRUSTSTORE_PASSWORD);
+    this.truststoreType = this.getString(TRUSTSTORE_TYPE);
+    this.sslProtocol = this.getString(SSL_PROTOCOL);
+
     this.connectionFactory = connectionFactory();
   }
 
@@ -116,7 +152,15 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
         .define(TOPOLOGY_RECOVERY_ENABLED_CONFIG, ConfigDef.Type.BOOLEAN, true, ConfigDef.Importance.LOW, TOPOLOGY_RECOVERY_ENABLED_DOC)
         .define(NETWORK_RECOVERY_INTERVAL_CONFIG, ConfigDef.Type.INT, 10000, ConfigDef.Importance.LOW, NETWORK_RECOVERY_INTERVAL_DOC)
         .define(PORT_CONFIG, ConfigDef.Type.INT, ConnectionFactory.DEFAULT_AMQP_PORT, ConfigDef.Importance.MEDIUM, PORT_DOC)
-        .define(USE_SSL, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.HIGH, USE_SSL_DOC);
+        .define(USE_SSL, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.HIGH, USE_SSL_DOC)
+        .define(KEYSTORE_LOCATION, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_LOCATION_DOC)
+        .define(KEYSTORE_PASSWORD, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_PASSWORD_DOC)
+        .define(KEYSTORE_PASSPHRASE, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_PASSPHRASE_DOC)
+        .define(KEYSTORE_TYPE, ConfigDef.Type.STRING, "JKS", ConfigDef.Importance.LOW, KEYSTORE_TYPE_DOC)
+        .define(TRUSTSTORE_LOCATION, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, TRUSTSTORE_LOCATION_DOC)
+        .define(TRUSTSTORE_PASSWORD, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, TRUSTSTORE_PASSWORD_DOC)
+        .define(TRUSTSTORE_TYPE, ConfigDef.Type.STRING, "JKS", ConfigDef.Importance.LOW, TRUSTSTORE_TYPE_DOC)
+        .define(SSL_PROTOCOL, ConfigDef.Type.STRING, "TLSv1.3", ConfigDef.Importance.LOW, SSL_PROTOCOL_DOC);
   }
 
   public final ConnectionFactory connectionFactory() {
@@ -139,11 +183,39 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
     connectionFactory.setPort(this.port);
     if (this.useSsl)
       try {
-        connectionFactory.useSslProtocol();
+        connectionFactory.useSslProtocol(getSLLContext());
       } catch (NoSuchAlgorithmException | KeyManagementException e) {
+        e.printStackTrace();
+      } catch (UnrecoverableKeyException e) {
+        e.printStackTrace();
+      } catch (CertificateException e) {
+        e.printStackTrace();
+      } catch (KeyStoreException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
         e.printStackTrace();
       }
 
     return connectionFactory;
+  }
+
+  public final SSLContext getSLLContext() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+    char[] keyPassphrase = this.keystorePassword.toCharArray();
+    char[] passphrase = this.keystorePassphrase.toCharArray();
+    KeyStore ks = KeyStore.getInstance(this.keystoreType);
+    ks.load(new BufferedInputStream(new FileInputStream(this.keystoreLocation)), keyPassphrase);
+    KeyManagerFactory kmf = KeyManagerFactory.getInstance("PKIX");
+    kmf.init(ks, passphrase);
+
+    char[] trustPassphrase = this.truststorePassword.toCharArray();
+    KeyStore tks = KeyStore.getInstance(this.truststoreType);
+    tks.load(new BufferedInputStream(new FileInputStream(this.truststoreLocation)), trustPassphrase);
+    TrustManagerFactory tmf = TrustManagerFactory.getInstance("PKIX");
+    tmf.init(tks);
+
+    SSLContext sslContext = SSLContext.getInstance(this.sslProtocol);
+    sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+    return sslContext;
   }
 }
