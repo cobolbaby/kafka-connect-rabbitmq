@@ -1,4 +1,3 @@
-
 # Introduction
 
 # Source Connectors
@@ -438,4 +437,76 @@ Update an existing instance.
 curl -s -X PUT -H 'Content-Type: application/json' --data @connector.json http://localhost:8083/connectors/TestSinkConnector1/config
 ```
 
+## SSL Configuration
 
+### `rabbitmq.ssl.keystore.location`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Path to the keystore.
+
+### `rabbitmq.ssl.keystore.password`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Keystore password.
+
+### `rabbitmq.ssl.keystore.passphrase`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Keystore passphrase.
+
+### `rabbitmq.ssl.keystore.type`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "JKS"
+
+Keystore type.
+
+### `rabbitmq.ssl.truststore.location`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Path to the truststore.
+
+### `rabbitmq.ssl.truststore.password`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Truststore password.
+
+### `rabbitmq.ssl.truststore.type`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "JKS"
+
+Truststore type.
+
+### `rabbitmq.ssl.protocol`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "TLSv1.3"
+
+SSL/TLS protocol version.
