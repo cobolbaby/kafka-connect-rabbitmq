@@ -19,8 +19,14 @@ import com.rabbitmq.client.ConnectionFactory;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import javax.security.cert.CertificateException;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.*;
 import java.util.Map;
 
 public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
@@ -192,14 +198,14 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
         e.printStackTrace();
       } catch (KeyStoreException e) {
         e.printStackTrace();
-      } catch (IOException e) {
+      } catch (IOException | java.security.cert.CertificateException e) {
         e.printStackTrace();
       }
 
     return connectionFactory;
   }
 
-  public final SSLContext getSLLContext() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException {
+  public final SSLContext getSLLContext() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, UnrecoverableKeyException, KeyManagementException, java.security.cert.CertificateException {
     char[] keyPassphrase = this.keystorePassword.toCharArray();
     char[] passphrase = this.keystorePassphrase.toCharArray();
     KeyStore ks = KeyStore.getInstance(this.keystoreType);
