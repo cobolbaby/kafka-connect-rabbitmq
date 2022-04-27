@@ -29,6 +29,12 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
   public static final String QUEUE_CONF = "rabbitmq.queue";
   public static final String QUEUE_DOC = "rabbitmq.queue";
 
+  public static final String EXCHANGE_DURABLE = "rabbitmq.exchange.durable";
+  public static final String EXCHANGE_DURABLE_DOC = "Set RabbitMQ exchange durable flag.";
+
+  public static final String EXCHANGE_AUTODELETE = "rabbitmq.exchange.autodelete";
+  public static final String EXCHANGE_AUTODELETE_DOC = "Set RabbitMQ exchange auto_delete flag.";
+
   public static final String PREFETCH_COUNT_CONF = "rabbitmq.prefetch.count";
   public static final String PREFETCH_COUNT_DOC = "Maximum number of messages that the server will deliver, 0 if unlimited. " +
       "See `Channel.basicQos(int, boolean) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/Channel.html#basicQos-int-boolean->`_";
@@ -51,6 +57,8 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
   public static final String QUEUE_TTL_DOC = "rabbitmq.queue.ttl";
 
   public final String kafkaTopic;
+  public final boolean autodelete;
+  public final boolean durable;
   public final List<String> queues;
   public final int prefetchCount;
   public final boolean prefetchGlobal;
@@ -63,6 +71,8 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
     super(config(), settings);
 
     this.kafkaTopic = this.getString(TOPIC_CONF);
+    this.autodelete = this.getBoolean(EXCHANGE_AUTODELETE);
+    this.durable = this.getBoolean(EXCHANGE_DURABLE);
     this.queues = this.getList(QUEUE_CONF);
     this.prefetchCount = this.getInt(PREFETCH_COUNT_CONF);
     this.prefetchGlobal = this.getBoolean(PREFETCH_GLOBAL_CONF);
@@ -75,6 +85,8 @@ public class RabbitMQSourceConnectorConfig extends CommonRabbitMQConnectorConfig
   public static ConfigDef config() {
     return CommonRabbitMQConnectorConfig.config()
         .define(TOPIC_CONF, ConfigDef.Type.STRING, ConfigDef.Importance.HIGH, TOPIC_DOC)
+        .define(EXCHANGE_DURABLE, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.HIGH, EXCHANGE_DURABLE_DOC)
+        .define(EXCHANGE_AUTODELETE, ConfigDef.Type.BOOLEAN, true, ConfigDef.Importance.HIGH, EXCHANGE_AUTODELETE_DOC)
         .define(PREFETCH_COUNT_CONF, ConfigDef.Type.INT, 0, ConfigDef.Importance.MEDIUM, PREFETCH_COUNT_DOC)
         .define(PREFETCH_GLOBAL_CONF, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.MEDIUM, PREFETCH_GLOBAL_DOC)
         .define(QUEUE_CONF, ConfigDef.Type.LIST, ConfigDef.Importance.HIGH, QUEUE_DOC)
