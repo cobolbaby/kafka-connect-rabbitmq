@@ -70,7 +70,7 @@ public class RabbitMQSourceTask extends SourceTask {
       this.channel = this.connection.createChannel();
 
       log.info("Declaring exchange");
-      this.channel.exchangeDeclare(config.exchange, "topic");
+      this.channel.exchangeDeclare(config.exchange, "topic", config.durable, config.autodelete, null);
 
       log.info("Declaring queues");
       Map<String, Object> arguments = new HashMap<String, Object>();

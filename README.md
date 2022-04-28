@@ -1,4 +1,3 @@
-
 # Introduction
 
 # Source Connectors
@@ -438,4 +437,141 @@ Update an existing instance.
 curl -s -X PUT -H 'Content-Type: application/json' --data @connector.json http://localhost:8083/connectors/TestSinkConnector1/config
 ```
 
+## SSL/TLS
 
+#### Configuration
+
+##### `rabbitmq.ssl.keystore.location`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Path to the keystore.
+
+##### `rabbitmq.ssl.keystore.password`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Keystore password.
+
+##### `rabbitmq.ssl.keystore.passphrase`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Keystore passphrase.
+
+##### `rabbitmq.ssl.keystore.type`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "JKS"
+
+Keystore type.
+
+##### `rabbitmq.ssl.truststore.location`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Path to the truststore.
+
+##### `rabbitmq.ssl.truststore.password`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* ""
+
+Truststore password.
+
+##### `rabbitmq.ssl.truststore.type`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "JKS"
+
+Truststore type.
+
+##### `rabbitmq.ssl.protocol`
+*Importance:* Low
+
+*Type:* String
+
+*Default Value:* "TLSv1.3"
+
+SSL/TLS protocol version.
+
+#### Examples
+
+##### Standalone Example
+
+This configuration is used typically along with [standalone mode](http://docs.confluent.io/current/connect/concepts.html#standalone-workers).
+
+```properties
+name=RabbitMQSourceConnector1
+connector.class=com.github.themeetgroup.kafka.connect.rabbitmq.source.RabbitMQSourceConnector
+tasks.max=1
+kafka.topic=< Required Configuration >
+rabbitmq.queue=< Required Configuration >
+rabbitmq.ssl=< Value<Boolean> >
+rabbitmq.ssl.keystore.location=< Value<String> >
+rabbitmq.ssl.keystore.password=< Value<String> >
+rabbitmq.ssl.keystore.passphrase=< Value<String> >
+rabbitmq.ssl.keystore.type=< Value<String> >
+rabbitmq.ssl.truststore.location=< Value<String> >
+rabbitmq.ssl.truststore.password=< Value<String> >
+rabbitmq.ssl.truststore.type=< Value<String> >
+rabbitmq.ssl.protocol=< Value<String> >
+```
+
+##### Distributed Example
+
+This configuration is used typically along with [distributed mode](http://docs.confluent.io/current/connect/concepts.html#distributed-workers).
+Write the following json to `connector.json`, configure all of the required values, and use the command below to
+post the configuration to one the distributed connect worker(s).
+
+```json
+{
+  "config" : {
+    "name" : "RabbitMQSourceConnector1",
+    "connector.class" : "com.github.themeetgroup.kafka.connect.rabbitmq.source.RabbitMQSourceConnector",
+    "tasks.max" : "1",
+    "kafka.topic" : "< Required Configuration >",
+    "rabbitmq.queue" : "< Required Configuration >",
+    "rabbitmq.ssl" : "true",
+    "rabbitmq.ssl.keystore.location" : "< Value<String> >",
+    "rabbitmq.ssl.keystore.password" : "< Value<String> >",
+    "rabbitmq.ssl.keystore.passphrase" : "< Value<String> >",
+    "rabbitmq.ssl.keystore.type" : "< Value<String> >",
+    "rabbitmq.ssl.truststore.location" : "< Value<String> >",
+    "rabbitmq.ssl.truststore.password" : "< Value<String> >",
+    "rabbitmq.ssl.truststore.type" : "< Value<String> >",
+    "rabbitmq.ssl.protocol" : "< Value<String> >"
+  }
+}
+```
+
+Use curl to post the configuration to one of the Kafka Connect Workers. Change `http://localhost:8083/` the the endpoint of
+one of your Kafka Connect worker(s).
+
+Create a new instance.
+```bash
+curl -s -X POST -H 'Content-Type: application/json' --data @connector.json http://localhost:8083/connectors
+```
+
+Update an existing instance.
+```bash
+curl -s -X PUT -H 'Content-Type: application/json' --data @connector.json http://localhost:8083/connectors/TestSinkConnector1/config
+```
