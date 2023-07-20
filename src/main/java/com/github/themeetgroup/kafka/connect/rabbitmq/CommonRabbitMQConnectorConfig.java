@@ -166,14 +166,14 @@ public abstract class CommonRabbitMQConnectorConfig extends AbstractConfig {
         .define(NETWORK_RECOVERY_INTERVAL_CONFIG, ConfigDef.Type.INT, 10000, ConfigDef.Importance.LOW, NETWORK_RECOVERY_INTERVAL_DOC)
         .define(PORT_CONFIG, ConfigDef.Type.INT, ConnectionFactory.DEFAULT_AMQP_PORT, ConfigDef.Importance.MEDIUM, PORT_DOC)
         .define(USE_SSL, ConfigDef.Type.BOOLEAN, false, ConfigDef.Importance.HIGH, USE_SSL_DOC)
-        .define(KEYSTORE_LOCATION, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, KEYSTORE_LOCATION_DOC)
-        .define(KEYSTORE_PASSWORD, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, KEYSTORE_PASSWORD_DOC)
-        .define(KEYSTORE_PASSPHRASE, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, KEYSTORE_PASSPHRASE_DOC)
-        .define(KEYSTORE_TYPE, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, KEYSTORE_TYPE_DOC)
-        .define(TRUSTSTORE_LOCATION, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, TRUSTSTORE_LOCATION_DOC)
-        .define(TRUSTSTORE_PASSWORD, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, TRUSTSTORE_PASSWORD_DOC)
-        .define(TRUSTSTORE_TYPE, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, TRUSTSTORE_TYPE_DOC)
-        .define(SSL_PROTOCOL, ConfigDef.Type.STRING, ConfigDef.Importance.LOW, SSL_PROTOCOL_DOC);
+        .define(KEYSTORE_LOCATION, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_LOCATION_DOC)
+        .define(KEYSTORE_PASSWORD, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_PASSWORD_DOC)
+        .define(KEYSTORE_PASSPHRASE, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_PASSPHRASE_DOC)
+        .define(KEYSTORE_TYPE, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, KEYSTORE_TYPE_DOC)
+        .define(TRUSTSTORE_LOCATION, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, TRUSTSTORE_LOCATION_DOC)
+        .define(TRUSTSTORE_PASSWORD, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, TRUSTSTORE_PASSWORD_DOC)
+        .define(TRUSTSTORE_TYPE, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, TRUSTSTORE_TYPE_DOC)
+        .define(SSL_PROTOCOL, ConfigDef.Type.STRING, "", ConfigDef.Importance.LOW, SSL_PROTOCOL_DOC);
   }
 
   public final ConnectionFactory connectionFactory() {
