@@ -20,6 +20,8 @@ import com.github.jcustenborder.kafka.connect.utils.VersionUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.AMQP.BasicProperties;
+
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.errors.RetriableException;
 import org.apache.kafka.connect.sink.SinkRecord;
@@ -41,7 +43,6 @@ public class RabbitMQSinkTask extends SinkTask {
   Channel channel;
   Connection connection;
 
-
   @Override
   public String version() {
     return VersionUtil.version(this.getClass());
@@ -55,8 +56,13 @@ public class RabbitMQSinkTask extends SinkTask {
         throw new ConnectException("the value of the record has an invalid type (must be of type byte[])");
       }
       try {
+        BasicProperties.Builder builder = new BasicProperties.Builder();
+        builder = RabbitMQSinkHeaderParser.parse(builder, config.getString(HEADER_CONF));
+        builder = addExpiration(builder);
+        BasicProperties basicProperties = builder.build();
+
         channel.basicPublish(this.config.exchange, this.config.routingKey,
-              RabbitMQSinkHeaderParser.parse(config.getString(HEADER_CONF)), (byte[]) record.value());
+            basicProperties, (byte[]) record.value());
       } catch (IOException e) {
         log.error("There was an error while publishing the outgoing message to RabbitMQ");
         throw new RetriableException(e);
@@ -69,7 +75,8 @@ public class RabbitMQSinkTask extends SinkTask {
     this.config = new RabbitMQSinkConnectorConfig(settings);
     ConnectionFactory connectionFactory = this.config.connectionFactory();
     try {
-      log.info("Opening connection to {}:{}/{} (SSL: {})", this.config.host, this.config.port, this.config.virtualHost, this.config.useSsl);
+      log.info("Opening connection to {}:{}/{} (SSL: {})", this.config.host, this.config.port, this.config.virtualHost,
+          this.config.useSsl);
       this.connection = connectionFactory.newConnection();
     } catch (IOException | TimeoutException e) {
       throw new ConnectException(e);
@@ -94,4 +101,10 @@ public class RabbitMQSinkTask extends SinkTask {
     }
   }
 
+  private BasicProperties.Builder addExpiration(BasicProperties.Builder builder) {
+    if (this.config.expiration != -1) {
+      builder.expiration(Integer.toString(this.config.expiration));
+    }
+    return builder;
+  }
 }
