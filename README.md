@@ -334,6 +334,15 @@ Connection TCP establishment timeout in milliseconds. zero for infinite. See `Co
 
 
 The AMQP0-9-1 protocol handshake timeout, in milliseconds. See `ConnectionFactory.setHandshakeTimeout(int) <https://www.rabbitmq.com/releases/rabbitmq-java-client/current-javadoc/com/rabbitmq/client/ConnectionFactory.html#setHandshakeTimeout-int->`_
+##### `rabbitmq.expiration.ms`
+*Importance:* Low
+
+*Type:* Int
+
+*Default Value*: no message expiration
+
+
+The message expiration (TTL) property, in milliseconds. See `AMQP.BasicProperties.Builder.expiration(string) <https://rabbitmq.github.io/rabbitmq-java-client/api/current/com/rabbitmq/client/AMQP.BasicProperties.Builder.html#expiration(java.lang.String)>`_
 ##### `rabbitmq.network.recovery.interval.ms`
 *Importance:* Low
 

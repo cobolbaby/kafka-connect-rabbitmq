@@ -43,7 +43,7 @@ public class RabbitMQSinkHeaderParser {
 
   }
 
-  static AMQP.BasicProperties parse(final String headerConfig) {
+  static AMQP.BasicProperties.Builder parse(AMQP.BasicProperties.Builder builder, final String headerConfig) {
     final Map<String, Object> headerTemp = DEFAULT_HEADERS.entrySet()
             .stream()
             .map(entry -> new Pair<>(entry.getKey(), entry.getValue().get()))
@@ -55,7 +55,7 @@ public class RabbitMQSinkHeaderParser {
               .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
       headers.forEach((k, v) -> headerTemp.merge(k, v, (o, n) -> n));
     }
-    return new AMQP.BasicProperties.Builder().headers(headerTemp).build();
+    return builder.headers(headerTemp);
   }
 
   private static final class Pair<K, V> extends AbstractMap.SimpleEntry<K, V> {
